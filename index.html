@@ -603,6 +603,7 @@
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
+      <div id="hit-counter"></div>
       <div class="copyright">
         &copy; Copyright <strong><span>iPortfolio</span></strong>
       </div>
@@ -631,6 +632,21 @@
 
   <!-- Template Main JS File -->
   <script src="include/js/main.js"></script>
+
+  <!-- Hit Counter -->
+  <script>
+    const hitCounter = document.getElementById("hit-counter");
+    hitCounter.style.display = "none";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://api.countapi.xyz/hit/SWiener-proto-hit/visits");
+    xhr.responseType = "json";
+    xhr.onload = function() {
+        hitCounter.textContent = this.response.value;
+        hitCounter.style.display = "inline-block";
+    }
+    xhr.send();
+  </script>
 
 </body>
 
