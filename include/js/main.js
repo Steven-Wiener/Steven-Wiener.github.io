@@ -2,7 +2,7 @@
  * Author:   https://github.com/Steven-Wiener
  * Main URL: https://steven-wiener.github.io
  */
-const hitHost = 'test';
+const hitHost = 'Steven-Wiener-analyst';
 const pagesThatMatter = ['total-visits', 'linkedin', 'github', 'epic', 'capitalbrewery', 'mfteam', 'visualstudio', 'printmanagement', 'suzanne', 'snake', 'udp', 'java'];
 
 if (/.*\/index\.html/.test(window.location.pathname)) { // index.html
