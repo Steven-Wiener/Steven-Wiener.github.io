@@ -614,33 +614,8 @@
   <!-- Template Main JS File -->
   <script src="include/js/iPortfolio.js"></script>
 
-  <!-- Hit Counter -->
-  <script type="text/javascript">
-    window.onload = function() {
-      const hitCounter = document.getElementById("hit-counter");
-      hitCounter.style.display = "none";
-
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "https://api.countapi.xyz/hit/SWiener-proto-hit/total-visits");
-      xhr.responseType = "json";
-      xhr.onload = function() {
-          hitCounter.textContent = this.response.value;
-          hitCounter.style.display = "inline-block";
-      }
-      xhr.send();
-    }
-
-    function hit(page) {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "https://api.countapi.xyz/hit/SWiener-proto-hit/" + page);
-      xhr.responseType = "json";
-      xhr.onload = function() {
-          console.log(`${page} has been hit ${this.response.value} times!`);
-      }
-      xhr.send();
-    }
-  </script>
-
+  <!-- Steven-Wiener Main JS File -->
+  <script src="include/js/main.js" hitHost="SWiener-proto-hit"></script>
 </body>
 
 </html>

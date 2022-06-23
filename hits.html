@@ -2,21 +2,7 @@
 <html lang="en">
 
 <head>
-  <script type="text/javascript">
-    window.onload = function() {
-      let hitsInner = '';
-      for (const page of ["total-visits", "linkedin", "github", "epic", "capitalbrewery", "mfteam", "visualstudio", "printmanagement", "suzanne", "snake", "udp", "java"]) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://api.countapi.xyz/get/SWiener-proto-hit/" + page);
-        xhr.responseType = "json";
-        xhr.onload = function() {
-          hitsInner += `<tr><td>${page}</td><td>${this.response.value}</td></tr>`;
-          document.getElementById('hits-table').innerHTML = `<table border="1" cellspacing="1" cellpadding="1"><tbody><tr><th>Page</th><th>Hits</th></tr>${hitsInner}</tbody></table>`;
-        }
-        xhr.send();
-      }
-    }
-  </script>
+  <script src="include/js/main.js"></script>
 </head>
 <body>
   <div id="hits-table"></div>
