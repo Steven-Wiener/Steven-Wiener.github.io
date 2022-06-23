@@ -1,256 +1,65 @@
 /**
-* Template Name: iPortfolio - v3.6.0
-* Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-(function() {
-  "use strict";
+ * Author:   https://github.com/Steven-Wiener
+ * Main URL: https://steven-wiener.github.io
+ */
+const hitHost = 'test';
+const pagesThatMatter = ['total-visits', 'linkedin', 'github', 'epic', 'capitalbrewery', 'mfteam', 'visualstudio', 'printmanagement', 'suzanne', 'snake', 'udp', 'java'];
 
-  /**
-   * Easy selector helper function
-   */
-  const select = (el, all = false) => {
-    el = el.trim()
-    if (all) {
-      return [...document.querySelectorAll(el)]
-    } else {
-      return document.querySelector(el)
-    }
-  }
+if (/.*\/index\.html/.test(window.location.pathname)) { // index.html
+  (function() {
+    'use strict';
+    /**
+     * Hit Counter: Increment total-visits on window load
+     * API Info:    https://countapi.xyz/
+     * Destination: https://steven-wiener.github.io/hits.html
+     */
+    window.addEventListener('load', () => {
+      const hitCounter = document.getElementById('hit-counter');
+      hitCounter.style.display = 'none';
 
-  /**
-   * Easy event listener function
-   */
-  const on = (type, el, listener, all = false) => {
-    let selectEl = select(el, all)
-    if (selectEl) {
-      if (all) {
-        selectEl.forEach(e => e.addEventListener(type, listener))
-      } else {
-        selectEl.addEventListener(type, listener)
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', `https://api.countapi.xyz/hit/${hitHost}/total-visits`);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        hitCounter.textContent = this.response.value;
+        hitCounter.style.display = 'inline-block';
       }
-    }
-  }
-
-  /**
-   * Easy on scroll event listener 
-   */
-  const onscroll = (el, listener) => {
-    el.addEventListener('scroll', listener)
-  }
-
-  /**
-   * Navbar links active state on scroll
-   */
-  let navbarlinks = select('#navbar .scrollto', true)
-  const navbarlinksActive = () => {
-    let position = window.scrollY + 200
-    navbarlinks.forEach(navbarlink => {
-      if (!navbarlink.hash) return
-      let section = select(navbarlink.hash)
-      if (!section) return
-      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
-        navbarlink.classList.add('active')
-      } else {
-        navbarlink.classList.remove('active')
-      }
-    })
-  }
-  window.addEventListener('load', navbarlinksActive)
-  onscroll(document, navbarlinksActive)
-
-  /**
-   * Scrolls to an element with header offset
-   */
-  const scrollto = (el) => {
-    let elementPos = select(el).offsetTop
-    window.scrollTo({
-      top: elementPos,
-      behavior: 'smooth'
-    })
-  }
-
-  /**
-   * Back to top button
-   */
-  let backtotop = select('.back-to-top')
-  if (backtotop) {
-    const toggleBacktotop = () => {
-      if (window.scrollY > 100) {
-        backtotop.classList.add('active')
-      } else {
-        backtotop.classList.remove('active')
-      }
-    }
-    window.addEventListener('load', toggleBacktotop)
-    onscroll(document, toggleBacktotop)
-  }
-
-  /**
-   * Mobile nav toggle
-   */
-  on('click', '.mobile-nav-toggle', function(e) {
-    select('body').classList.toggle('mobile-nav-active')
-    this.classList.toggle('bi-list')
-    this.classList.toggle('bi-x')
-  })
-
-  /**
-   * Scrool with ofset on links with a class name .scrollto
-   */
-  on('click', '.scrollto', function(e) {
-    if (select(this.hash)) {
-      e.preventDefault()
-
-      let body = select('body')
-      if (body.classList.contains('mobile-nav-active')) {
-        body.classList.remove('mobile-nav-active')
-        let navbarToggle = select('.mobile-nav-toggle')
-        navbarToggle.classList.toggle('bi-list')
-        navbarToggle.classList.toggle('bi-x')
-      }
-      scrollto(this.hash)
-    }
-  }, true)
-
-  /**
-   * Scroll with ofset on page load with hash links in the url
-   */
-  window.addEventListener('load', () => {
-    if (window.location.hash) {
-      if (select(window.location.hash)) {
-        scrollto(window.location.hash)
-      }
-    }
-  });
-
-  /**
-   * Hero type effect
-   */
-  const typed = select('.typed')
-  if (typed) {
-    let typed_strings = typed.getAttribute('data-typed-items')
-    typed_strings = typed_strings.split(',')
-    new Typed('.typed', {
-      strings: typed_strings,
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
+      xhr.send();
     });
-  }
 
-  /**
-   * Skills animation
-   */
-  let skilsContent = select('.skills-content');
-  if (skilsContent) {
-    new Waypoint({
-      element: skilsContent,
-      offset: '80%',
-      handler: function(direction) {
-        let progress = select('.progress .progress-bar', true);
-        progress.forEach((el) => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%'
-        });
+    /**
+     * Hit Counter: Increment specific page on anchor/link click
+     */
+    const hit = (page) => {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', `https://api.countapi.xyz/hit/${hitHost}/${page}`);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        console.log(`${page} has been hit ${this.response.value} times!`);
       }
-    })
-  }
-
-  /**
-   * Porfolio isotope and filter
-   */
-  window.addEventListener('load', () => {
-    let portfolioContainer = select('.portfolio-container');
-    if (portfolioContainer) {
-      let portfolioIsotope = new Isotope(portfolioContainer, {
-        itemSelector: '.portfolio-item'
-      });
-
-      let portfolioFilters = select('#portfolio-flters li', true);
-
-      on('click', '#portfolio-flters li', function(e) {
-        e.preventDefault();
-        portfolioFilters.forEach(function(el) {
-          el.classList.remove('filter-active');
-        });
-        this.classList.add('filter-active');
-
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-        portfolioIsotope.on('arrangeComplete', function() {
-          AOS.refresh()
-        });
-      }, true);
+      xhr.send();
     }
-
-  });
-
-  /**
-   * Initiate portfolio lightbox 
-   */
-  const portfolioLightbox = GLightbox({
-    selector: '.portfolio-lightbox'
-  });
-
-  /**
-   * Portfolio details slider
-   */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Testimonials slider
-   */
-  new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    },
-    breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 20
-      },
-
-      1200: {
-        slidesPerView: 3,
-        spaceBetween: 20
+  })()
+} else if (/.*\/hits\.html/.test(window.location.pathname)) { // hits.html
+  (function() {
+    'use strict';
+    /**
+     * Hit Counter: Build table
+     * Destination: https://steven-wiener.github.io/hits.html
+     */
+    window.addEventListener('load', () => {
+    let hitsInner = '';
+    for (const page of pagesThatMatter) {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', `https://api.countapi.xyz/get/${hitHost}/${page}`);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        hitsInner += `<tr><td>${page}</td><td>${this.response.value}</td></tr>`;
+        document.getElementById('hits-table').innerHTML = `<table border="1" cellspacing="1" cellpadding="1"><tbody><tr><th>Page</th><th>Hits</th></tr>${hitsInner}</tbody></table>`;
       }
+      xhr.send();
     }
+    // TODO: after last run, sort resulting table by # of hits? might need to make hitsInner an array
   });
-
-  /**
-   * Animation on scroll
-   */
-  window.addEventListener('load', () => {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    })
-  });
-
 })()
+}
