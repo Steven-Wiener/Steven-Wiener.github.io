@@ -3,29 +3,37 @@
  * Main URL: https://steven-wiener.github.io
  */
 const hitHost = 'Steven-Wiener-analyst';
-const pagesThatMatter = ['total-visits', 'linkedin', 'github', 'epic', 'capitalbrewery', 'mfteam', 'visualstudio', 'printmanagement', 'suzanne', 'snake', 'udp', 'java'];
+const pagesThatMatter = ['total-visits', 'linkedin', 'github', 'epic', 'capitalbrewery', 'mfteam', 'visualstudio', 'printmanagement', 'suzanne', 'snake', 'udp', 'java']; // TODO: Make this dynamic, scrub 'a' elements with onclick=hit
+let favoriteTrails = ['https://www.alltrails.com/widget/trail/us/new-hampshire/tuckerman-ravine-trail-to-mount-washington', // TODO: Make this dynamic, source https://www.alltrails.com/members/bob-marley-108/favorites
+                      'https://www.alltrails.com/widget/trail/us/utah/green-river-canyon-rim-trail',
+                      'https://www.alltrails.com/widget/trail/us/south-dakota/little-devils-tower-spur-trail',
+                      'https://www.alltrails.com/widget/trail/us/maine/cadillac-mountain-north-ridge-trail-gorge-path',
+                      'https://www.alltrails.com/widget/trail/us/wyoming/popo-agie-falls-trail--3',
+                      'https://www.alltrails.com/widget/trail/us/new-york/letchworth-state-park-gorge-trail',
+                      'https://www.alltrails.com/widget/trail/us/wyoming/tongue-river-canyon',
+                      'https://www.alltrails.com/widget/trail/us/wisconsin/howard-temin-lakeshore-path',
+                      'https://www.alltrails.com/widget/trail/us/wisconsin/lake-monona-bike-loop'];
 
 if (/.*\/index\.html/.test(window.location.pathname)) { // index.html
   (function() {
     'use strict';
-    /**
-     * Hit Counter: Increment total-visits on window load
-     * API Info:    https://countapi.xyz/
-     * Destination: https://steven-wiener.github.io/hits.html
-     */
-    window.addEventListener('load', () => {
-      const hitCounter = document.getElementById('hit-counter');
-      hitCounter.style.display = 'none';
 
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', `https://api.countapi.xyz/hit/${hitHost}/total-visits`);
-      xhr.responseType = 'json';
-      xhr.onload = function() {
-        hitCounter.textContent = this.response.value;
-        hitCounter.style.display = 'inline-block';
-      }
-      xhr.send();
-    });
+    /**
+     * Set src of element with id as input - used for AllTrails iframe loop
+     */
+    const setSrc = (id, src) => {
+      const el = document.getElementById(id);
+      el.setAttribute('src', src);
+    }
+
+    /**
+     * AllTrails iframe loop - shift from the front, then push it back to the end
+     */
+    setInterval(() => {
+      let trail = favoriteTrails.shift();
+      setSrc('favoriteTrails', trail);
+      favoriteTrails.push(trail);
+    }, 7000);
 
     /**
      * Hit Counter: Increment specific page on anchor/link click
@@ -39,13 +47,30 @@ if (/.*\/index\.html/.test(window.location.pathname)) { // index.html
       }
       xhr.send();
     }
+
+    window.addEventListener('load', () => {
+      /**
+       * Hit Counter: Increment total-visits
+       * API Info:    https://countapi.xyz/
+       */
+      const hitCounter = document.getElementById('hit-counter');
+      hitCounter.style.display = 'none';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', `https://api.countapi.xyz/hit/${hitHost}/total-visits`);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        hitCounter.textContent = this.response.value;
+        hitCounter.style.display = 'inline-block';
+      }
+      xhr.send();
+    });
   })()
 } else if (/.*\/hits\.html/.test(window.location.pathname)) { // hits.html
   (function() {
     'use strict';
     /**
      * Hit Counter: Build table
-     * Destination: https://steven-wiener.github.io/hits.html
      */
     window.addEventListener('load', () => {
     let hitsInner = '';
