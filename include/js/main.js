@@ -87,25 +87,4 @@ if (/.*\/hits\.html/.test(window.location.pathname)) { // hits.html
       xhr.send();
     });
   })()
-} else if (/.*\/hits\.html/.test(window.location.pathname)) { // hits.html
-  (function() {
-    'use strict';
-    /**
-     * Hit Counter: Build table
-     */
-    window.addEventListener('load', () => {
-    let hitsInner = '';
-    for (const page of pagesThatMatter) {
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', `https://api.countapi.xyz/get/${hitHost}/${page}`);
-      xhr.responseType = 'json';
-      xhr.onload = function() {
-        hitsInner += `<tr><td>${page}</td><td>${this.response.value}</td></tr>`;
-        document.getElementById('hits-table').innerHTML = `<table border="1" cellspacing="1" cellpadding="1"><tbody><tr><th>Page</th><th>Hits</th></tr>${hitsInner}</tbody></table>`;
-      }
-      xhr.send();
-    }
-    // TODO: after last run, sort resulting table by # of hits? might need to make hitsInner an array
-  });
-})()
 }
